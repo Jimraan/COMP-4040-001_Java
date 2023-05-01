@@ -7,13 +7,7 @@ import org.parboiled.annotations.BuildParseTree;
 @BuildParseTree
 public class FormParser extends BaseParser<Object> {
     Rule Form() {
-        return Sequence(
-                FullName(),
-                NewLine(),
-                Address(),
-                NewLine(),
-                PhoneNumber()
-        );
+        return OneOrMore(FirstOf(FullName(), NewLine(), Address(), PhoneNumber()));
     }
 
     Rule NewLine() {
@@ -50,7 +44,7 @@ public class FormParser extends BaseParser<Object> {
     Rule Name() {
         return Sequence(
                 Cap(),
-                (Optional(FirstOf(Ch('.'), OneOrMore(Lower()))))
+                (Optional(FirstOf(Ch('.'), OneOrMore(Letter()))))
         );
     }
     Rule Cap() {
@@ -106,7 +100,9 @@ public class FormParser extends BaseParser<Object> {
                         IgnoreCase("Cv"),
                         IgnoreCase("Pl"),
                         IgnoreCase("St"),
-                        IgnoreCase("Ln")
+                        IgnoreCase("Ln"),
+                        IgnoreCase("Dr"),
+                        IgnoreCase("Sta")
                 ),
                 Optional(Ch('.'))
         );
